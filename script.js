@@ -4,6 +4,8 @@ const footerContainer = document.querySelector(".footerContainer");
 const contentAdder = document.querySelector(".contentAdder");
 let currentPage = 0;
 let currentPageID = 0;
+let currentParentID = 0;
+let currentPreviousParentID = 0;
 let previousPage = 0;
 let page0Content = [{
         entry: "Einkaufslisten",
@@ -16,6 +18,9 @@ let page0Content = [{
 ];
 
 function renderPage0(pageID, previousParentID) {
+
+    console.log(page0Content);
+
     let header = `<h1 class="heading">Mein Einkaufsplaner</h1>`;
     let output = "";
 
@@ -31,6 +36,8 @@ function renderPage0(pageID, previousParentID) {
     footerContainer.innerHTML = "";
     currentPage = 0;
     currentPageID = 0;
+    currentParentID = 0;
+    currentPreviousParentID = 0;
 }
 
 let page1Content = [{
@@ -56,7 +63,9 @@ let page1Content = [{
 ];
 
 function renderPage1(pageID, parentID, previousParentID) {
-    console.log(currentPageID)
+
+    console.log(page1Content);
+
     let headerContent = "";
 
     page0Content.forEach(
@@ -65,13 +74,14 @@ function renderPage1(pageID, parentID, previousParentID) {
             ID
         }) => {
             if (ID == pageID) {
-                headerContent = entry
+                headerContent = entry;
+                currentPageID = ID;
             }
         }
     )
 
     let header = `<h1 class="heading">${headerContent}</h1>`;
-    let footer = `<p class="backButton" href="" onclick="return renderPage0(${currentPageID}, ${currentPageID}, ${currentPageID})">Zurück</p>`;
+    let footer = `<p class="backButton" href="" onclick="return renderPage0(${parentID}, ${previousParentID}, ${previousParentID})">Zurück</p>`;
     let output = "";
 
     page1Content.forEach(
@@ -92,6 +102,8 @@ function renderPage1(pageID, parentID, previousParentID) {
     footerContainer.innerHTML = footer;
     currentPage = 1;
     currentPageID = pageID;
+    currentParentID = parentID;
+    currentPreviousParentID = previousParentID;
 }
 
 let page2Content = [{
@@ -119,9 +131,17 @@ let page2Content = [{
         ID: 1,
         parentID: 1,
     },
+    {
+        entry: "Menü2Inhalt",
+        ID: 2,
+        parentID: 3,
+    },
 ];
 
 function renderPage2(pageID, parentID, previousParentID) {
+
+    console.log(page2Content);
+
     let headerContent = "";
 
     page1Content.forEach(
@@ -130,13 +150,14 @@ function renderPage2(pageID, parentID, previousParentID) {
             ID
         }) => {
             if (ID == pageID) {
-                headerContent = entry
+                headerContent = entry;
+                currentPageID = ID;
             }
         }
     )
 
     let header = `<h1 class="heading">${headerContent}</h1>`;
-    let footer = `<p class="backButton" href="" onclick="return renderPage1(${currentPageID}, ${currentPageID}, ${currentPageID})">Zurück</p>`;
+    let footer = `<p class="backButton" href="" onclick="return renderPage1(${parentID}, ${previousParentID}, ${previousParentID})">Zurück</p>`;
     let output = "";
 
     page2Content.forEach(
@@ -147,7 +168,7 @@ function renderPage2(pageID, parentID, previousParentID) {
         }) => {
             if (parentID == pageID) {
                 (output += `
-                <div ID=link1 href="" onclick="return show_page2(${ID}, ${parentID})"><p class="pageEntries">${entry}</p></div>
+                <div ID=link1 href="" onclick="return show_page2(${ID}, ${parentID}, ${previousParentID})"><p class="pageEntries">${entry}</p></div>
             `) // remove link to page
             }
         }
@@ -157,6 +178,8 @@ function renderPage2(pageID, parentID, previousParentID) {
     footerContainer.innerHTML = footer;
     currentPage = 2;
     currentPageID = pageID;
+    currentParentID = parentID;
+    currentPreviousParentID = previousParentID;
 }
 
 function addContentAdder() {
@@ -170,7 +193,6 @@ document.addEventListener("DOMContentLoaded", addContentAdder);
 
 function addContent() {
     let contentInput = document.getElementById("entryInput").value;
-    console.log(currentPageID)
     // console.log(`${contentInput}`);
     if (contentInput == "") {
         return;
@@ -190,7 +212,7 @@ function addContent() {
             entry: contentInput,
             ID: newID,
         })
-        renderPage0(currentPageID);
+        renderPage0(currentPageID, currentParentID, currentPreviousParentID);
     }
     if (currentPage == 1) {
         let newID = 0;
@@ -208,7 +230,7 @@ function addContent() {
             ID: newID,
             parentID: currentPageID,
         })
-        renderPage1(currentPageID, currentPageID, currentPageID);
+        renderPage1(currentPageID, currentParentID, currentPreviousParentID);
     }
     if (currentPage == 2) {
         let newID = 0;
@@ -224,9 +246,9 @@ function addContent() {
         page2Content.push({
             entry: contentInput,
             ID: newID,
-            parentID: currentPageID,
+            parentID: currentPageID, //parentID == ID of the last element of previous pages content
         })
-        renderPage2(currentPageID, currentPageID, currentPageID);
+        renderPage2(currentPageID, currentParentID, currentPreviousParentID);
     }
     document.getElementById("entryInput").value = "";
 }

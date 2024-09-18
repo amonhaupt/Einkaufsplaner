@@ -13,10 +13,6 @@ let page0Content = [{
         entry: "Menüplanung",
         ID: 1,
     },
-    {
-        entry: "neuer eintrag",
-        ID: 2,
-    }
 ];
 
 function renderPage0(pageID, previousParentID) {
@@ -60,6 +56,7 @@ let page1Content = [{
 ];
 
 function renderPage1(pageID, parentID, previousParentID) {
+    console.log(currentPageID)
     let headerContent = "";
 
     page0Content.forEach(
@@ -163,7 +160,7 @@ function renderPage2(pageID, parentID, previousParentID) {
 }
 
 function addContentAdder() {
-    let output = `<form id="frm1" action="/action_page.php">
+    let output = `<form id="frm1" action="javascript: addContent()">
                 Neuer Eintrag: <input type="text" name="fname" id="entryInput">
                 <input type="button" onclick="addContent()" value="Submit">
                 </form>`

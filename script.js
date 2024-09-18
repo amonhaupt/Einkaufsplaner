@@ -6,7 +6,7 @@ let currentPage = 0;
 let currentPageID = 0;
 let currentParentID = 0;
 let currentPreviousParentID = 0;
-let previousPage = 0;
+
 let page0Content = [{
         entry: "Einkaufslisten",
         ID: 0,
@@ -18,8 +18,6 @@ let page0Content = [{
 ];
 
 function renderPage0(pageID, previousParentID) {
-
-    console.log(page0Content);
 
     let header = `<h1 class="heading">Mein Einkaufsplaner</h1>`;
     let output = "";
@@ -63,8 +61,6 @@ let page1Content = [{
 ];
 
 function renderPage1(pageID, parentID, previousParentID) {
-
-    console.log(page1Content);
 
     let headerContent = "";
 
@@ -140,8 +136,6 @@ let page2Content = [{
 
 function renderPage2(pageID, parentID, previousParentID) {
 
-    console.log(page2Content);
-
     let headerContent = "";
 
     page1Content.forEach(
@@ -185,15 +179,16 @@ function renderPage2(pageID, parentID, previousParentID) {
 function addContentAdder() {
     let output = `<form id="frm1" action="javascript: addContent()">
                 Neuer Eintrag: <input type="text" name="fname" id="entryInput">
-                <input type="button" onclick="addContent()" value="Submit">
+                <input type="button" onclick="addContent()" value="Hinzufügen">
                 </form>`
     contentAdder.innerHTML = output
 }
 document.addEventListener("DOMContentLoaded", addContentAdder);
 
 function addContent() {
+    
     let contentInput = document.getElementById("entryInput").value;
-    // console.log(`${contentInput}`);
+
     if (contentInput == "") {
         return;
     }

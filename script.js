@@ -29,7 +29,9 @@ function renderPage0(pageID, parentID, previousParentID) {
             entry,
             ID
         }) =>
-        (output += `<div href="" onclick="return renderPage1(${ID}, ${ID}, ${ID})"><p class="pageEntries">${entry}</p></div>`)
+        (output += `<div href="" onclick="return renderPage1(${ID}, ${ID}, ${ID})"><p class="pageEntries">${entry}</p></div>
+            <div class="removeButton" onclick="removeContent(${ID}, ${ID}, ${ID})"><p>Entfernen</p></div>
+            `)
     )
     pageContainer.innerHTML = output;
     headerContainer.innerHTML = header;
@@ -68,6 +70,7 @@ function renderPage1(pageID, parentID, previousParentID) {
             if (parentID == pageID) {
                 (output += `
                 <div ID=link1 href="" onclick="return renderPage2(${ID}, ${parentID}, ${previousParentID})"><p class="pageEntries">${entry}</p></div>
+                <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
             `)
             }
         }
@@ -121,6 +124,7 @@ function renderPage2(pageID, parentID, previousParentID) {
             if (parentID == pageID) {
                 (output += `
                 <div ID=link1 href="" onclick="return show_page2(${ID}, ${parentID}, ${previousParentID})"><p class="pageEntries">${entry}</p></div>
+                <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
             `) // remove link to page
             }
         }
@@ -178,13 +182,15 @@ function addContentAdder() {
     let output = `<form id="frm1" action="javascript: addContent()">
                 Neuer Eintrag: <input type="text" name="fname" id="entryInput">
                 <input type="button" onclick="addContent()" value="Hinzufügen">
-                </form>`
-    contentAdder.innerHTML = output
+                Einträge Bearbeiten:
+                <input id="editButton "type="button" onclick="editContent()" value="Bearbeiten">
+                </form>`;
+    contentAdder.innerHTML = output;
 }
 document.addEventListener("DOMContentLoaded", addContentAdder);
 
 function addContent() {
-    
+
     let contentInput = document.getElementById("entryInput").value;
 
     if (contentInput == "") {
@@ -267,5 +273,24 @@ function loadContent(ID) {
     }
     if (ID == 2) {
         page2Content = JSON.parse(localStorage.getItem(`page${ID}Dictonary`));
+    }
+}
+
+function editContent() {
+    console.log("editContent");
+    document.querySelectorAll(".removeButton").forEach(element => element.style.display = "block");
+    // document.querySelector("#editButton").value = "Bestätigen";
+    // page0Content.splice(0, 1);
+    // console.log(page0Content)
+    // renderPage0(0,0,0)   
+}
+
+function removeContent(ID, parentID, previousParentID) {
+    // delete element at ID -> page1Content - delete element where parentID == ID -> page2Content - delete element where parentID == ID of deleted element in page2Content
+    console.log("removeContent");
+    if (currentPage == 0) {
+        page0Content.splice(ID, ID + 1);
+        saveContent(page0Content, 0);
+        renderPage0(ID, parentID, previousParentID);
     }
 }

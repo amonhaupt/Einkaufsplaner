@@ -17,7 +17,9 @@ let page0Content = [{
     },
 ];
 
-function renderPage0(pageID, previousParentID) {
+function renderPage0(pageID, parentID, previousParentID) {
+
+    loadContent(0);
 
     let header = `<h1 class="heading">Mein Einkaufsplaner</h1>`;
     let output = "";
@@ -48,35 +50,12 @@ let page1Content = [{
         ID: 1,
         parentID: 0,
     },
-    {
-        entry: "Menü 1",
-        ID: 2,
-        parentID: 1,
-    },
-    {
-        entry: "Menü 2",
-        ID: 3,
-        parentID: 1,
-    }
 ];
 
 function renderPage1(pageID, parentID, previousParentID) {
 
-    let headerContent = "";
+    loadContent(1);
 
-    page0Content.forEach(
-        ({
-            entry,
-            ID
-        }) => {
-            if (ID == pageID) {
-                headerContent = entry;
-                currentPageID = ID;
-            }
-        }
-    )
-
-    let header = `<h1 class="heading">${headerContent}</h1>`;
     let footer = `<p class="backButton" href="" onclick="return renderPage0(${parentID}, ${previousParentID}, ${previousParentID})">Zurück</p>`;
     let output = "";
 
@@ -94,12 +73,14 @@ function renderPage1(pageID, parentID, previousParentID) {
         }
     )
     pageContainer.innerHTML = output;
-    headerContainer.innerHTML = header;
     footerContainer.innerHTML = footer;
     currentPage = 1;
     currentPageID = pageID;
     currentParentID = parentID;
     currentPreviousParentID = previousParentID;
+
+    loadHeaderContent(1, pageID);
+
 }
 
 let page2Content = [{
@@ -122,35 +103,12 @@ let page2Content = [{
         ID: 0,
         parentID: 0,
     },
-    {
-        entry: "wgparty",
-        ID: 1,
-        parentID: 1,
-    },
-    {
-        entry: "Menü2Inhalt",
-        ID: 2,
-        parentID: 3,
-    },
 ];
 
 function renderPage2(pageID, parentID, previousParentID) {
 
-    let headerContent = "";
+    loadContent(2);
 
-    page1Content.forEach(
-        ({
-            entry,
-            ID
-        }) => {
-            if (ID == pageID) {
-                headerContent = entry;
-                currentPageID = ID;
-            }
-        }
-    )
-
-    let header = `<h1 class="heading">${headerContent}</h1>`;
     let footer = `<p class="backButton" href="" onclick="return renderPage1(${parentID}, ${previousParentID}, ${previousParentID})">Zurück</p>`;
     let output = "";
 
@@ -168,13 +126,53 @@ function renderPage2(pageID, parentID, previousParentID) {
         }
     )
     pageContainer.innerHTML = output;
-    headerContainer.innerHTML = header;
     footerContainer.innerHTML = footer;
     currentPage = 2;
     currentPageID = pageID;
     currentParentID = parentID;
     currentPreviousParentID = previousParentID;
+
+    loadHeaderContent(2, pageID);
+
 }
+
+function loadHeaderContent(ID, pageID) {
+    let headerContent = "";
+    console.log("ID: " + ID);
+    console.log("pageID: " + pageID);
+    console.log("page0Content: " + JSON.stringify(page0Content));
+
+    if (ID == 1) {
+        page0Content.forEach(
+            ({
+                entry,
+                ID
+            }) => {
+                if (ID == pageID) {
+                    headerContent = entry;
+                    // currentPageID = ID;
+                }
+            }
+        )
+    }
+    if (ID == 2) {
+        page1Content.forEach(
+            ({
+                entry,
+                ID
+            }) => {
+                if (ID == pageID) {
+                    headerContent = entry;
+                    // currentPageID = ID;
+                }
+            }
+        )
+    }
+
+    let header = `<h1 class="heading">${headerContent}</h1>`;
+    headerContainer.innerHTML = header;
+}
+
 
 function addContentAdder() {
     let output = `<form id="frm1" action="javascript: addContent()">
@@ -202,11 +200,12 @@ function addContent() {
                     newID = ID + 1;
                 }
             }
-        )
+        );
         page0Content.push({
             entry: contentInput,
             ID: newID,
-        })
+        });
+        saveContent(page0Content, 0);
         renderPage0(currentPageID, currentParentID, currentPreviousParentID);
     }
     if (currentPage == 1) {
@@ -219,12 +218,13 @@ function addContent() {
                     newID = ID + 1;
                 }
             }
-        )
+        );
         page1Content.push({
             entry: contentInput,
             ID: newID,
             parentID: currentPageID,
-        })
+        });
+        saveContent(page1Content, 1);
         renderPage1(currentPageID, currentParentID, currentPreviousParentID);
     }
     if (currentPage == 2) {
@@ -237,13 +237,35 @@ function addContent() {
                     newID = ID + 1;
                 }
             }
-        )
+        );
         page2Content.push({
             entry: contentInput,
             ID: newID,
             parentID: currentPageID, //parentID == ID of the last element of previous pages content
-        })
+        });
+        saveContent(page2Content, 2);
         renderPage2(currentPageID, currentParentID, currentPreviousParentID);
     }
     document.getElementById("entryInput").value = "";
+}
+
+function saveContent(content, ID) {
+
+    localStorage.setItem(`page${ID}Dictonary`, JSON.stringify(content));
+
+}
+
+function loadContent(ID) {
+    if (localStorage.getItem(`page${ID}Dictonary`) === null) {
+        return;
+    }
+    if (ID == 0) {
+        page0Content = JSON.parse(localStorage.getItem(`page${ID}Dictonary`));
+    }
+    if (ID == 1) {
+        page1Content = JSON.parse(localStorage.getItem(`page${ID}Dictonary`));
+    }
+    if (ID == 2) {
+        page2Content = JSON.parse(localStorage.getItem(`page${ID}Dictonary`));
+    }
 }

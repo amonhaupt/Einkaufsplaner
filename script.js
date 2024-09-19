@@ -285,12 +285,42 @@ function editContent() {
     // renderPage0(0,0,0)   
 }
 
-function removeContent(ID, parentID, previousParentID) {
+function removeContent(inputID, inputParentID, inputPreviousParentID) {
     // delete element at ID -> page1Content - delete element where parentID == ID -> page2Content - delete element where parentID == ID of deleted element in page2Content
     console.log("removeContent");
     if (currentPage == 0) {
-        page0Content.splice(ID, ID + 1);
+        let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
+        page0Content.splice(elementToRemove, elementToRemove + 1);
+
+        page1Content.forEach(
+            ({
+                ID,
+                parentID
+            }) => {
+                if (parentID == inputParentID) {
+                    page1Content.splice(parentID, parentID + 1);
+                    // console.log(page1Content);
+                    console.log(page2Content);
+                    let page1ID = ID
+                    page2Content.forEach(
+                        ({
+                            ID,
+                            parentID
+                        }) => {
+                            console.log(parentID)
+                            if (parentID == page1ID) {
+                                page2Content.splice(parentID, parentID + 1);
+                                console.log(page2Content);
+                            }
+                            
+                        }
+                    )
+                    
+                }
+            }
+        );
+
         saveContent(page0Content, 0);
-        renderPage0(ID, parentID, previousParentID);
+        renderPage0(inputID, inputParentID, inputPreviousParentID);
     }
 }

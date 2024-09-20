@@ -312,23 +312,20 @@ function removeContent(inputID, inputParentID, inputPreviousParentID) {
         let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
         page0Content.splice(elementToRemove, 1);
 
-        page1Content.forEach(
-            ({
-                ID,
-                parentID
-            }) => {
-                if (parentID == inputParentID) {
-                    page1Content.splice(parentID, 1);
-                    let page1ID = ID
-                    for (let i = 0; i < page2Content.length; i++) {
-                        if (page2Content[i].parentID == page1ID) {
-                            page2Content.splice(i, 1);
-                            i--;
-                        }
+
+        for (let i = 0; i < page1Content.length; i++) {
+            let page1ID = page1Content[i].ID;
+            if (page1Content[i].parentID == inputParentID) {
+                page1Content.splice(i, 1);
+                for (let i = 0; i < page2Content.length; i++) {
+                    if (page2Content[i].parentID == page1ID) {
+                        page2Content.splice(i, 1);
+                        i--;
                     }
                 }
+                i--;
             }
-        );
+        }
 
         saveContent(page0Content, 0);
         saveContent(page1Content, 1);

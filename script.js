@@ -134,7 +134,7 @@ function renderPage2(pageID, parentID, previousParentID) {
                 <div href="" onclick="return changeClass(${ID})"><p ID=entry${ID} class=${contentClass}>${entry}</p></div>
                 <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
                 
-            `) // remove link to page -- >> <div class="editButton" onclick="editContent(${ID}, ${parentID}, ${previousParentID})"><p>Bearbeiten</p></div>
+            `)
             }
         }
     )
@@ -150,7 +150,6 @@ function renderPage2(pageID, parentID, previousParentID) {
 }
 
 function changeClass(inputID) {
-    console.log("changeClass()");
     let elementToChangeClass = page2Content.findIndex(x => x.ID === inputID);
     let pageEntry = document.querySelector(`#entry${inputID}`)
     if (pageEntry.classList.contains("pageEntries")) {
@@ -163,14 +162,10 @@ function changeClass(inputID) {
         page2Content[elementToChangeClass].contentClass = "pageEntries";
     }
     saveContent(page2Content, 2);
-    console.log("saved")
 }
 
 function loadHeaderContent(ID, pageID) {
     let headerContent = "";
-    console.log("ID: " + ID);
-    console.log("pageID: " + pageID);
-    console.log("page0Content: " + JSON.stringify(page0Content));
 
     if (ID == 1) {
         page0Content.forEach(
@@ -180,7 +175,6 @@ function loadHeaderContent(ID, pageID) {
             }) => {
                 if (ID == pageID) {
                     headerContent = entry;
-                    // currentPageID = ID;
                 }
             }
         )
@@ -193,7 +187,6 @@ function loadHeaderContent(ID, pageID) {
             }) => {
                 if (ID == pageID) {
                     headerContent = entry;
-                    // currentPageID = ID;
                 }
             }
         )
@@ -273,7 +266,7 @@ function addContent() {
         page2Content.push({
             entry: contentInput,
             ID: newID,
-            parentID: currentPageID, //parentID == ID of the last element of previous pages content
+            parentID: currentPageID,
         });
         saveContent(page2Content, 2);
         renderPage2(currentPageID, currentParentID, currentPreviousParentID);
@@ -303,17 +296,11 @@ function loadContent(ID) {
 }
 
 function showEditContent() {
-    console.log("showEditContent()");
     document.querySelectorAll(".removeButton").forEach(element => element.style.display = "block");
     document.querySelectorAll(".editButton").forEach(element => element.style.display = "block");
-    // document.querySelector("#editButton").value = "Bestätigen";
-    // page0Content.splice(0, 1);
-    // console.log(page0Content)
-    // renderPage0(0,0,0)   
 }
 
 function removeContent(inputID, inputParentID, inputPreviousParentID) {
-    console.log("removeContent()");
     if (currentPage == 0) {
         let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
         page0Content.splice(elementToRemove, 1);
@@ -358,7 +345,6 @@ function removeContent(inputID, inputParentID, inputPreviousParentID) {
 }
 
 function editContent(inputID, inputParentID, inputPreviousParentID) {
-    console.log("editContent()");
     var editInput = prompt("Neuen Namen eintragen:", "Neuer Name");
 
     if (currentPage == 0) {

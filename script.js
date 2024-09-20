@@ -21,9 +21,11 @@ function renderPage0(pageID, parentID, previousParentID) {
 
     loadContent(0);
 
-    saveContent(page0Content, 0);
-    saveContent(page1Content, 1);
-    saveContent(page2Content, 2);
+    // does not work properly
+
+    // saveContent(page0Content, 0);
+    // saveContent(page1Content, 1);
+    // saveContent(page2Content, 2);
 
     let header = `<h1 class="heading">Mein Einkaufsplaner</h1>`;
     let output = "";

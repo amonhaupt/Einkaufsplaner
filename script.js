@@ -286,11 +286,10 @@ function editContent() {
 }
 
 function removeContent(inputID, inputParentID, inputPreviousParentID) {
-    // delete element at ID -> page1Content - delete element where parentID == ID -> page2Content - delete element where parentID == ID of deleted element in page2Content
     console.log("removeContent");
     if (currentPage == 0) {
         let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
-        page0Content.splice(elementToRemove, elementToRemove + 1);
+        page0Content.splice(elementToRemove, 1);
 
         page1Content.forEach(
             ({
@@ -298,29 +297,23 @@ function removeContent(inputID, inputParentID, inputPreviousParentID) {
                 parentID
             }) => {
                 if (parentID == inputParentID) {
-                    page1Content.splice(parentID, parentID + 1);
-                    // console.log(page1Content);
-                    console.log(page2Content);
+                    page1Content.splice(parentID, 1);
                     let page1ID = ID
-                    page2Content.forEach(
-                        ({
-                            ID,
-                            parentID
-                        }) => {
-                            console.log(parentID)
-                            if (parentID == page1ID) {
-                                page2Content.splice(parentID, parentID + 1);
-                                console.log(page2Content);
-                            }
-                            
+                    for (let i = 0; i < page2Content.length; i++) {
+                        if (page2Content[i].parentID == page1ID) {
+                            page2Content.splice(i, 1);
+                            i--;
                         }
-                    )
-                    
+                    }
                 }
             }
         );
 
         saveContent(page0Content, 0);
+        saveContent(page1Content, 1);
+        saveContent(page2Content, 2);
+
+        
         renderPage0(inputID, inputParentID, inputPreviousParentID);
     }
 }

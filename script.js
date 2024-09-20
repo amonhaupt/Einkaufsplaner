@@ -93,21 +93,25 @@ let page2Content = [{
         entry: "Tomaten",
         ID: 0,
         parentID: 0,
+        contentClass: "pageEntries",
     },
     {
         entry: "Mehl",
         ID: 1,
         parentID: 0,
+        contentClass: "pageEntries",
     },
     {
         entry: "Käse",
         ID: 2,
         parentID: 0,
+        contentClass: "pageEntries",
     },
     {
         entry: "Hefe",
         ID: 3,
         parentID: 0,
+        contentClass: "pageEntries",
     },
 ];
 
@@ -122,11 +126,12 @@ function renderPage2(pageID, parentID, previousParentID) {
         ({
             entry,
             ID,
-            parentID
+            parentID,
+            contentClass
         }) => {
             if (parentID == pageID) {
                 (output += `
-                <div href="" onclick="return changeClass(${ID})"><p ID=entry${ID} class="pageEntries">${entry}</p></div>
+                <div href="" onclick="return changeClass(${ID})"><p ID=entry${ID} class=${contentClass}>${entry}</p></div>
                 <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
                 
             `) // remove link to page -- >> <div class="editButton" onclick="editContent(${ID}, ${parentID}, ${previousParentID})"><p>Bearbeiten</p></div>
@@ -144,18 +149,21 @@ function renderPage2(pageID, parentID, previousParentID) {
 
 }
 
-function changeClass(ID) {
+function changeClass(inputID) {
     console.log("changeClass()");
-    let pageEntry = document.querySelector(`#entry${ID}`)
+    let elementToChangeClass = page2Content.findIndex(x => x.ID === inputID);
+    let pageEntry = document.querySelector(`#entry${inputID}`)
     if (pageEntry.classList.contains("pageEntries")) {
         pageEntry.classList.remove("pageEntries");
         pageEntry.classList.add("checked");
+        page2Content[elementToChangeClass].contentClass = "checked";
     } else {
         pageEntry.classList.add("pageEntries");
         pageEntry.classList.remove("checked");
+        page2Content[elementToChangeClass].contentClass = "pageEntries";
     }
-    
-    
+    saveContent(page2Content, 2);
+    console.log("saved")
 }
 
 function loadHeaderContent(ID, pageID) {
@@ -304,7 +312,7 @@ function showEditContent() {
     // renderPage0(0,0,0)   
 }
 
-function removeContent(inputID, inputParentID, inputPreviousParentID) { 
+function removeContent(inputID, inputParentID, inputPreviousParentID) {
     console.log("removeContent()");
     if (currentPage == 0) {
         let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
@@ -349,7 +357,7 @@ function removeContent(inputID, inputParentID, inputPreviousParentID) {
     }
 }
 
-function editContent(inputID, inputParentID, inputPreviousParentID) { 
+function editContent(inputID, inputParentID, inputPreviousParentID) {
     console.log("editContent()");
     var editInput = prompt("Neuen Namen eintragen:", "Neuer Name");
 

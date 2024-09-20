@@ -271,6 +271,7 @@ function addContent() {
             entry: contentInput,
             ID: newID,
             parentID: currentPageID,
+            contentClass: "pageEntries",
         });
         saveContent(page2Content, 2);
         renderPage2(currentPageID, currentParentID, currentPreviousParentID);

@@ -42,6 +42,16 @@ body {
     cursor: pointer;
 }
 
+.checked {
+    text-decoration: line-through;
+    border-radius: 5px;
+    border: 3px solid red;
+    background-color: #f1f1f1;
+    line-height: 75px;
+    font-size: 30px;
+    cursor: pointer;
+}
+
 .contentAdder {
     margin: auto;
     width: 50%;

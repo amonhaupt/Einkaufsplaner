@@ -96,17 +96,17 @@ let page2Content = [{
     },
     {
         entry: "Mehl",
-        ID: 0,
+        ID: 1,
         parentID: 0,
     },
     {
         entry: "Käse",
-        ID: 0,
+        ID: 2,
         parentID: 0,
     },
     {
         entry: "Hefe",
-        ID: 0,
+        ID: 3,
         parentID: 0,
     },
 ];
@@ -126,7 +126,7 @@ function renderPage2(pageID, parentID, previousParentID) {
         }) => {
             if (parentID == pageID) {
                 (output += `
-                <div ID=link1 href="" onclick="return show_page2(${ID}, ${parentID}, ${previousParentID})"><p class="pageEntries">${entry}</p></div>
+                <div href="" onclick="return changeClass(${ID})"><p ID=entry${ID} class="pageEntries">${entry}</p></div>
                 <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
                 
             `) // remove link to page -- >> <div class="editButton" onclick="editContent(${ID}, ${parentID}, ${previousParentID})"><p>Bearbeiten</p></div>
@@ -142,6 +142,20 @@ function renderPage2(pageID, parentID, previousParentID) {
 
     loadHeaderContent(2, pageID);
 
+}
+
+function changeClass(ID) {
+    console.log("changeClass()");
+    let pageEntry = document.querySelector(`#entry${ID}`)
+    if (pageEntry.classList.contains("pageEntries")) {
+        pageEntry.classList.remove("pageEntries");
+        pageEntry.classList.add("checked");
+    } else {
+        pageEntry.classList.add("pageEntries");
+        pageEntry.classList.remove("checked");
+    }
+    
+    
 }
 
 function loadHeaderContent(ID, pageID) {
@@ -290,7 +304,7 @@ function showEditContent() {
     // renderPage0(0,0,0)   
 }
 
-function removeContent(inputID, inputParentID, inputPreviousParentID) {
+function removeContent(inputID, inputParentID, inputPreviousParentID) { 
     console.log("removeContent()");
     if (currentPage == 0) {
         let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
@@ -321,9 +335,21 @@ function removeContent(inputID, inputParentID, inputPreviousParentID) {
 
         renderPage0(inputID, inputParentID, inputPreviousParentID);
     }
+    if (currentPage == 1) {
+        let elementToRemove = page1Content.findIndex(x => x.ID === inputID);
+        page1Content.splice(elementToRemove, 1);
+        saveContent(page1Content, 1);
+        renderPage1(inputID, inputParentID, inputPreviousParentID);
+    }
+    if (currentPage == 2) {
+        let elementToRemove = page2Content.findIndex(x => x.ID === inputID);
+        page2Content.splice(elementToRemove, 1);
+        saveContent(page2Content, 2);
+        renderPage2(inputParentID, inputParentID, inputPreviousParentID);
+    }
 }
 
-function editContent(inputID, inputParentID, inputPreviousParentID) {
+function editContent(inputID, inputParentID, inputPreviousParentID) { 
     console.log("editContent()");
     var editInput = prompt("Neuen Namen eintragen:", "Neuer Name");
 
@@ -336,6 +362,6 @@ function editContent(inputID, inputParentID, inputPreviousParentID) {
     if (currentPage == 1) {
         page1Content[inputID].entry = editInput;
         saveContent(page1Content, 1);
-        renderPage1(inputID, inputParentID, inputPreviousParentID);
+        renderPage1(inputParentID, inputParentID, inputPreviousParentID);
     }
 }

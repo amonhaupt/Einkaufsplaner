@@ -31,8 +31,10 @@ function renderPage0(pageID, parentID, previousParentID) {
         }) =>
         (output += `<div href="" onclick="return renderPage1(${ID}, ${ID}, ${ID})"><p class="pageEntries">${entry}</p></div>
             <div class="removeButton" onclick="removeContent(${ID}, ${ID}, ${ID})"><p>Entfernen</p></div>
+            <div class="editButton" onclick="editContent(${ID}, ${parentID}, ${previousParentID})"><p>Bearbeiten</p></div>
             `)
     )
+
     pageContainer.innerHTML = output;
     headerContainer.innerHTML = header;
     footerContainer.innerHTML = "";
@@ -71,6 +73,7 @@ function renderPage1(pageID, parentID, previousParentID) {
                 (output += `
                 <div ID=link1 href="" onclick="return renderPage2(${ID}, ${parentID}, ${previousParentID})"><p class="pageEntries">${entry}</p></div>
                 <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
+                <div class="editButton" onclick="editContent(${ID}, ${parentID}, ${previousParentID})"><p>Bearbeiten</p></div>
             `)
             }
         }
@@ -125,7 +128,8 @@ function renderPage2(pageID, parentID, previousParentID) {
                 (output += `
                 <div ID=link1 href="" onclick="return show_page2(${ID}, ${parentID}, ${previousParentID})"><p class="pageEntries">${entry}</p></div>
                 <div class="removeButton" onclick="removeContent(${ID}, ${parentID}, ${previousParentID})"><p>Entfernen</p></div>
-            `) // remove link to page
+                
+            `) // remove link to page -- >> <div class="editButton" onclick="editContent(${ID}, ${parentID}, ${previousParentID})"><p>Bearbeiten</p></div>
             }
         }
     )
@@ -183,7 +187,7 @@ function addContentAdder() {
                 Neuer Eintrag: <input type="text" name="fname" id="entryInput">
                 <input type="button" onclick="addContent()" value="Hinzufügen">
                 Einträge Bearbeiten:
-                <input id="editButton "type="button" onclick="editContent()" value="Bearbeiten">
+                <input id="showEditButton "type="button" onclick="showEditContent()" value="Bearbeiten">
                 </form>`;
     contentAdder.innerHTML = output;
 }
@@ -276,9 +280,10 @@ function loadContent(ID) {
     }
 }
 
-function editContent() {
-    console.log("editContent");
+function showEditContent() {
+    console.log("showEditContent()");
     document.querySelectorAll(".removeButton").forEach(element => element.style.display = "block");
+    document.querySelectorAll(".editButton").forEach(element => element.style.display = "block");
     // document.querySelector("#editButton").value = "Bestätigen";
     // page0Content.splice(0, 1);
     // console.log(page0Content)
@@ -286,7 +291,7 @@ function editContent() {
 }
 
 function removeContent(inputID, inputParentID, inputPreviousParentID) {
-    console.log("removeContent");
+    console.log("removeContent()");
     if (currentPage == 0) {
         let elementToRemove = page0Content.findIndex(x => x.ID === inputID);
         page0Content.splice(elementToRemove, 1);
@@ -313,7 +318,24 @@ function removeContent(inputID, inputParentID, inputPreviousParentID) {
         saveContent(page1Content, 1);
         saveContent(page2Content, 2);
 
-        
+
         renderPage0(inputID, inputParentID, inputPreviousParentID);
+    }
+}
+
+function editContent(inputID, inputParentID, inputPreviousParentID) {
+    console.log("editContent()");
+    var editInput = prompt("Neuen Namen eintragen:", "Neuer Name");
+
+    if (currentPage == 0) {
+        page0Content[inputID].entry = editInput;
+        saveContent(page0Content, 0);
+        renderPage0(inputID, inputParentID, inputPreviousParentID);
+    }
+
+    if (currentPage == 1) {
+        page1Content[inputID].entry = editInput;
+        saveContent(page1Content, 1);
+        renderPage1(inputID, inputParentID, inputPreviousParentID);
     }
 }

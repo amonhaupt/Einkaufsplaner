@@ -23,7 +23,7 @@ body {
     background-color: #f1f1f1;
     line-height: 75px;
     font-size: 30px;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 .pageContainer {
@@ -39,7 +39,7 @@ body {
     background-color: #f1f1f1;
     line-height: 75px;
     font-size: 30px;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 .contentAdder {
@@ -54,9 +54,10 @@ form {
     border-radius: 5px;
     background-color: #f1f1f1;
     padding: 20px;
-  }
+}
 
-input[type=text], select {
+input[type=text],
+select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -64,9 +65,10 @@ input[type=text], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-} 
+}
 
-input[type=text], focus {
+input[type=text],
+focus {
     border: 3px solid lightblue;
 }
 
@@ -80,16 +82,16 @@ input[type=button] {
     border-radius: 4px;
     cursor: pointer;
     font-size: 20px;
-  }
-  
-  input[type=button]:hover {
+}
+
+input[type=button]:hover {
     background-color: lightskyblue;
-  }
+}
 
 .removeButton {
     display: none;
     width: 100px;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
     border-radius: 5px;
     border: none;
@@ -98,12 +100,35 @@ input[type=button] {
     background-color: lightblue;
     line-height: 20px;
     font-size: 20px;
-    cursor: pointer; 
+    cursor: pointer;
     margin: auto;
     width: 50%;
     text-align: center;
-  }
+}
 
-  .removeButton:hover {
+.removeButton:hover {
     background-color: lightskyblue;
-  }
+}
+
+.editButton {
+    display: none;
+    width: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+    background-color: lightblue;
+    line-height: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    margin: auto;
+    margin-top: 5px;
+    width: 50%;
+    text-align: center;
+}
+
+.editButton:hover {
+    background-color: lightskyblue;
+}
